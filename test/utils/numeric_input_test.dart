@@ -17,6 +17,16 @@ void main() {
       expect(NumericInput.backspace(''), '');
     });
 
+    test('clear resets input', () {
+      expect(NumericInput.clear(), '');
+    });
+
+    test('filter normalizes keyboard and paste input', () {
+      expect(NumericInput.filter('12.345'), '12.34');
+      expect(NumericInput.filter('abc12.3x4'), '12.34');
+      expect(NumericInput.filter('0.5'), '0.5');
+    });
+
     test('parse and normalize values', () {
       expect(NumericInput.parse('12.3'), 12.3);
       expect(NumericInput.normalize(100), '100');

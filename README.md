@@ -1,17 +1,133 @@
-# flutter_application_2
+# 我的资产
 
-A new Flutter project.
+一款使用 Flutter 开发的个人资产记账应用，支持多账户管理、月度留存统计、可配置的数据持久化，以及 JSON 备份与恢复。界面采用 Material 3 设计。
 
-## Getting Started
+## 功能概览
 
-This project is a starting point for a Flutter application.
+### 资产总览
 
-A few resources to get you started if this is your first Flutter project:
+- 汇总展示**净资产**、**总资产**、**总负债**
+- 支持账户类型：微信、支付宝、银行卡、现金、花呗（负债）、其他
+- 银行卡可选择具体银行，首页展示对应银行 Logo（SVG）
+- 微信 / 支付宝 / 花呗使用品牌图标资源
+- 添加、编辑、删除账户；编辑余额时使用自定义数字键盘
+- 每次创建账户或修改余额会写入**变动记录**，可在账户详情中查看历史
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### 负债与计算规则
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 仅**花呗**按负债处理：余额存为非负欠款，参与净资产计算时按负数计入
+- 其余类型按资产计入
+
+### 每月记账与留存
+
+- 可记录**当月资产快照**（同月重复记录会覆盖）
+- 首页「每月记账」卡片：记录 / 更新本月快照、查看近期历史留存
+- **月度留存**页：柱状图展示近 12 个月留存（增加为绿色、减少为红色），含统计摘要与明细列表
+- **记账提醒**：在设置中开启后，若本月尚未记录且当前日期 ≥ 设定日（1–28 号），首页显示 App 内提示（无系统通知）
+
+### 导航与扩展
+
+- 侧边栏：**资产总览**、**月度留存**、**设置**
+- 预留「数据分析」等入口，便于后续扩展
+
+### 数据持久化
+
+可在**设置 → 数据存储**中选择保存位置，切换时会**自动迁移**已有数据：
+
+| 方式 | 说明 |
+|------|------|
+| 应用内置 | 应用私有存储（SharedPreferences），默认方式 |
+| 本地文件 | 应用文档目录下的 `my_assets_data.json` |
+| 自定义位置 | 自选文件夹，以 JSON 文件保存 |
+
+存储配置单独保存，用于启动时定位数据文件；兼容旧版本仅使用 SharedPreferences 的数据。
+
+### 备份与恢复
+
+- **导出 JSON**：包含账户、变动记录、月度快照及设置等
+- **从 JSON 导入**：导入前确认摘要；导入后覆盖当前资产相关数据，**保留当前存储位置设置**
+- 支持带版本信息的备份格式，也支持纯 `AppData` 结构的旧 JSON
+
+## 技术栈
+
+- Flutter（Material 3，`ColorScheme.fromSeed` 主题）
+- `shared_preferences` — 内置存储与存储配置元数据
+- `path_provider` — 本地文档目录
+- `file_picker` — 自定义存储路径、导出 / 导入文件选择
+- `flutter_svg` — 银行与微信 SVG 图标
+- `uuid` — 记录与快照 ID
+
+## 项目结构（简要）
+
+```
+lib/
+├── main.dart                 # 应用入口
+├── data/                     # 仓储与多后端存储
+├── models/                   # 账户、快照、设置等模型
+├── screens/                  # 首页、设置、月度留存、AppShell
+├── services/                 # JSON 导出 / 导入
+└── widgets/                  # 列表、图表、侧边栏等组件
+assets/
+├── banks/                    # 银行 Logo（SVG）
+└── payment/                  # 微信、支付宝、花呗图标
+```
+
+## 开发与运行
+
+### 环境要求
+
+- Flutter SDK（本项目 `sdk: ^3.13.4`）
+- Windows 桌面开发需安装 Visual Studio（含 Windows SDK）
+- Android 开发需配置 Android SDK（可选）
+
+### 安装依赖
+
+```bash
+flutter pub get
+```
+
+### 运行
+
+```bash
+# Windows 桌面
+flutter run -d windows
+
+# Chrome（Web）
+flutter run -d chrome
+```
+
+### 测试
+
+```bash
+flutter test
+```
+
+### 打包（Windows 发布版）
+
+```bash
+flutter build windows --release
+```
+
+可执行文件及依赖位于：
+
+`build/windows/x64/runner/Release/`
+
+请**整文件夹**分发或拷贝（需包含 `flutter_application_2.exe`、`flutter_windows.dll` 与 `data` 目录）。
+
+### Web 发布版（可选）
+
+```bash
+flutter build web --release
+```
+
+输出目录：`build/web/`
+
+## 使用提示
+
+- 柱状图与「较上月留存」需至少**两个月**的快照才有对比数据
+- 自定义存储路径需先通过「选择文件夹」指定目录后再保存设置
+- 导出 / 导入在**设置 → 备份与恢复**；侧边栏也有「备份与恢复」快捷入口
+
+## 许可证
+
+本项目为个人学习 / 测试用途，未指定开源许可证时请勿当作商业产品默认授权使用。

@@ -30,7 +30,7 @@ class NumericKeypad extends StatelessWidget {
           onKeyTap: _handleKeyTap,
         ),
         _KeyRow(
-          keys: const ['.', '0', 'delete'],
+          keys: const ['clear', '.', '0', 'delete'],
           onKeyTap: _handleKeyTap,
         ),
       ],
@@ -40,6 +40,10 @@ class NumericKeypad extends StatelessWidget {
   void _handleKeyTap(String key) {
     if (key == 'delete') {
       onChanged(NumericInput.backspace(value));
+      return;
+    }
+    if (key == 'clear') {
+      onChanged(NumericInput.clear());
       return;
     }
     onChanged(NumericInput.appendDigit(value, key));
@@ -67,6 +71,7 @@ class _KeyRow extends StatelessWidget {
               child: _KeyButton(
                 label: _labelFor(key),
                 icon: key == 'delete' ? Icons.backspace_outlined : null,
+                compactLabel: key == 'clear',
                 onTap: () => onKeyTap(key),
               ),
             ),
@@ -79,6 +84,7 @@ class _KeyRow extends StatelessWidget {
   String _labelFor(String key) {
     return switch (key) {
       'delete' => '',
+      'clear' => '清空',
       _ => key,
     };
   }
@@ -89,10 +95,12 @@ class _KeyButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.icon,
+    this.compactLabel = false,
   });
 
   final String label;
   final IconData? icon;
+  final bool compactLabel;
   final VoidCallback onTap;
 
   @override
@@ -112,7 +120,10 @@ class _KeyButton extends StatelessWidget {
                 ? Icon(icon, color: theme.colorScheme.onSurface)
                 : Text(
                     label,
-                    style: theme.textTheme.headlineSmall?.copyWith(
+                    style: (compactLabel
+                            ? theme.textTheme.titleMedium
+                            : theme.textTheme.headlineSmall)
+                        ?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),

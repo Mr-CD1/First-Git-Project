@@ -30,6 +30,19 @@ class NumericInput {
     return current.substring(0, current.length - 1);
   }
 
+  static String clear() => '';
+
+  /// 将键盘输入或粘贴内容规范为与小键盘相同的金额字符串。
+  static String filter(String raw) {
+    var result = '';
+    for (final char in raw.split('')) {
+      if (char == '.' || RegExp(r'^\d$').hasMatch(char)) {
+        result = appendDigit(result, char);
+      }
+    }
+    return result;
+  }
+
   static double? parse(String value) {
     if (value.isEmpty || value == '.') {
       return null;
