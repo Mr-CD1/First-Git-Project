@@ -1,6 +1,7 @@
 import 'package:flutter_application_2/models/app_data.dart';
 import 'package:flutter_application_2/models/app_settings.dart';
 import 'package:flutter_application_2/models/asset_account.dart';
+import 'package:flutter_application_2/models/app_theme_mode.dart';
 import 'package:flutter_application_2/models/storage_location.dart';
 import 'package:flutter_application_2/models/asset_type.dart';
 import 'package:flutter_application_2/models/balance_change_type.dart';
@@ -73,6 +74,28 @@ void main() {
       expect(first.monthlySnapshots, hasLength(1));
       expect(second.monthlySnapshots, hasLength(1));
       expect(second.currentMonthSnapshot?.netWorth, 1500);
+    });
+
+    test('addAccount preserves theme mode in settings', () {
+      const settings = AppSettings(themeMode: AppThemeMode.dark);
+      final account = AssetAccount.create(
+        id: '1',
+        type: AssetType.wechat,
+        balance: 1,
+      );
+      final data = AppData.empty()
+          .updateSettings(settings)
+          .addAccount(account);
+
+      expect(data.settings.themeMode, AppThemeMode.dark);
+    });
+
+    test('round-trips theme mode through json', () {
+      const settings = AppSettings(themeMode: AppThemeMode.dark);
+      final data = AppData.empty().updateSettings(settings);
+      final restored = AppData.fromJson(data.toJson());
+
+      expect(restored.settings.themeMode, AppThemeMode.dark);
     });
 
     test('round-trips storage settings through json', () {

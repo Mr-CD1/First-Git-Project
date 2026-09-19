@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/app_data.dart';
 import '../models/app_settings.dart';
+import '../models/app_theme_mode.dart';
 import '../models/storage_location.dart';
 import '../widgets/backup_settings_section.dart';
 import '../widgets/storage_settings_section.dart';
@@ -11,10 +12,12 @@ class SettingsScreen extends StatefulWidget {
     super.key,
     required this.appData,
     this.onSaved,
+    this.onThemeModeChanged,
   });
 
   final AppData appData;
   final Future<void> Function(AppData data)? onSaved;
+  final ValueChanged<AppThemeMode>? onThemeModeChanged;
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -25,6 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late int _reminderDay;
   late StorageLocation _storageLocation;
   String? _customStoragePath;
+  late AppThemeMode _themeMode;
 
   @override
   void initState() {
@@ -45,6 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _reminderDay = data.settings.safeReminderDay;
     _storageLocation = data.settings.storageLocation;
     _customStoragePath = data.settings.customStoragePath;
+    _themeMode = data.settings.themeMode;
   }
 
   AppSettings get _settings => AppSettings(
@@ -52,7 +57,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         reminderDay: _reminderDay,
         storageLocation: _storageLocation,
         customStoragePath: _customStoragePath,
+        themeMode: _themeMode,
       );
+
+  void _onThemeModeSelected(AppThemeMode mode) {
+    setState(() => _themeMode = mode);
+    widget.onThemeModeChanged?.call(mode);
+  }
 
   bool get _storageConfigValid {
     if (_storageLocation != StorageLocation.customPath) {
@@ -140,6 +151,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        Text(
+          '外观',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '主题模式',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 12),
+        SegmentedButton<AppThemeMode>(
+          segments: AppThemeMode.values
+              .map(
+                (mode) => ButtonSegment(
+                  value: mode,
+                  label: Text(mode.label),
+                  icon: Icon(
+                    mode == AppThemeMode.dark
+                        ? Icons.dark_mode_outlined
+                        : Icons.light_mode_outlined,
+                  ),
+                ),
+              )
+              .toList(),
+          selected: {_themeMode},
+          onSelectionChanged: (selection) {
+            _onThemeModeSelected(selection.first);
+          },
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '切换后立即生效并自动保存；其它设置项需点击底部「保存设置」',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+        ),
+        const SizedBox(height: 24),
+        const Divider(),
+        const SizedBox(height: 16),
         Text(
           '记账提醒',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(

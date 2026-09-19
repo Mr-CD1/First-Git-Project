@@ -27,7 +27,7 @@ void main() {
     await tester.pumpWidget(MyApp(repository: AssetRepository()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.tap(find.byTooltip('打开导航菜单'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('月度留存'));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/app_data.dart';
+import '../theme/app_theme.dart';
 import '../widgets/monthly_savings_chart.dart';
 
 class MonthlySavingsScreen extends StatelessWidget {
@@ -116,10 +117,7 @@ class _MiniStatCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
-      ),
+      decoration: AppTheme.softPanelPrimary(theme.colorScheme),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

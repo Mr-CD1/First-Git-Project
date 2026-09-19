@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/monthly_chart_item.dart';
+import '../theme/app_theme.dart';
 import '../utils/currency_formatter.dart';
 
 class MonthlySavingsChart extends StatelessWidget {
@@ -31,11 +32,7 @@ class MonthlySavingsChart extends StatelessWidget {
     return Container(
       height: 280,
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
+      decoration: AppTheme.softPanel(theme.colorScheme),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -102,7 +99,7 @@ class _BarColumn extends StatelessWidget {
             height: maxBarHeight * ratio,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.85),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppRadii.smBorder,
             ),
           ),
           const SizedBox(height: 8),
@@ -140,11 +137,7 @@ class _EmptyChart extends StatelessWidget {
     return Container(
       height: 220,
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
+      decoration: AppTheme.softPanel(theme.colorScheme),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

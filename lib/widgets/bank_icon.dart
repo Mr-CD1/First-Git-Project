@@ -25,17 +25,13 @@ class BankIcon extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: selected ? color.withValues(alpha: 0.12) : Colors.white,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: selected ? color : color.withValues(alpha: 0.25),
-          width: selected ? 2 : 1,
-        ),
         boxShadow: [
           BoxShadow(
-            color: color.withValues(alpha: selected ? 0.18 : 0.08),
-            blurRadius: selected ? 8 : 4,
-            offset: const Offset(0, 2),
+            color: color.withValues(alpha: selected ? 0.22 : 0.1),
+            blurRadius: selected ? 12 : 6,
+            offset: const Offset(0, 3),
           ),
         ],
       ),

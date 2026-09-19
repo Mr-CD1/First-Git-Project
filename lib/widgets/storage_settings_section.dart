@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../data/storage/storage_config.dart';
 import '../models/storage_location.dart';
+import '../theme/app_theme.dart';
 
 class StorageSettingsSection extends StatefulWidget {
   const StorageSettingsSection({
@@ -129,11 +130,7 @@ class _StorageSettingsSectionState extends State<StorageSettingsSection> {
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: theme.colorScheme.surfaceContainerHighest
-                .withValues(alpha: 0.45),
-          ),
+          decoration: AppTheme.softPanel(theme.colorScheme),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

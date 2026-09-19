@@ -6,12 +6,13 @@ import '../models/app_data.dart';
 import '../models/asset_account.dart';
 import '../models/asset_type.dart';
 import '../models/bank_institution.dart';
+import '../theme/app_theme.dart';
 import '../utils/asset_type_ui.dart';
 import '../utils/currency_formatter.dart';
 import '../widgets/asset_type_icon.dart';
 import '../widgets/balance_input_sheet.dart';
 import '../widgets/balance_record_tile.dart';
-import '../widgets/bank_selector_grid.dart';
+import '../widgets/bank_selector_dropdown.dart';
 
 class AccountFormScreen extends StatefulWidget {
   const AccountFormScreen({
@@ -237,9 +238,7 @@ class _AccountFormScreenState extends State<AccountFormScreen> {
             ),
             if (_selectedType.requiresBank) ...[
               const SizedBox(height: 24),
-              _SectionLabel(title: '选择银行'),
-              const SizedBox(height: 12),
-              BankSelectorGrid(
+              BankSelectorDropdown(
                 selectedBank: _selectedBank,
                 onSelected: (bank) => setState(() => _selectedBank = bank),
               ),
@@ -269,17 +268,12 @@ class _AccountFormScreenState extends State<AccountFormScreen> {
             ),
             const SizedBox(height: 8),
             InkWell(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppRadii.mdBorder,
               onTap: _pickBalance,
               child: Ink(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: theme.colorScheme.outlineVariant),
-                  color: theme.colorScheme.surfaceContainerHighest
-                      .withValues(alpha: 0.35),
-                ),
+                decoration: AppTheme.softPanel(theme.colorScheme),
                 child: Row(
                   children: [
                     Icon(

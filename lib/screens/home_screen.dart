@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/app_data.dart';
 import '../widgets/asset_list_tile.dart';
-import '../widgets/asset_summary_header.dart';
+import '../widgets/home_overview_hero.dart';
 import '../widgets/empty_accounts_view.dart';
 import '../widgets/monthly_savings_card.dart';
 import 'account_form_screen.dart';
@@ -13,11 +13,13 @@ class HomeScreen extends StatelessWidget {
     required this.appData,
     required this.onAppDataChanged,
     this.onOpenMonthlyChart,
+    required this.onOpenDrawer,
   });
 
   final AppData appData;
   final Future<void> Function(AppData data) onAppDataChanged;
   final VoidCallback? onOpenMonthlyChart;
+  final VoidCallback onOpenDrawer;
 
   Future<void> _openAccountForm(
     BuildContext context, {
@@ -57,41 +59,51 @@ class HomeScreen extends StatelessWidget {
       ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     final hasAccounts = store.accounts.isNotEmpty;
 
-    return ListView(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AssetSummaryHeader(
+        HomeOverviewHero(
           netWorth: store.netWorth,
           totalAssets: store.totalAssets,
           totalLiabilities: store.totalLiabilities,
+          onOpenDrawer: onOpenDrawer,
         ),
-        MonthlySavingsCard(
-          appData: appData,
-          onRecord: () => _recordMonthlySnapshot(context),
-          onOpenChart: onOpenMonthlyChart,
+        Expanded(
+          child: ListView(
+            children: [
+              MonthlySavingsCard(
+                appData: appData,
+                onRecord: () => _recordMonthlySnapshot(context),
+                onOpenChart: onOpenMonthlyChart,
+              ),
+              if (!hasAccounts)
+                const EmptyAccountsView()
+              else ...[
+                if (assets.isNotEmpty) ...[
+                  _SectionTitle(title: '资产', count: assets.length),
+                  ...assets.map(
+                    (account) => AssetListTile(
+                      account: account,
+                      onTap: () =>
+                          _openAccountForm(context, accountId: account.id),
+                    ),
+                  ),
+                ],
+                if (liabilities.isNotEmpty) ...[
+                  _SectionTitle(title: '负债', count: liabilities.length),
+                  ...liabilities.map(
+                    (account) => AssetListTile(
+                      account: account,
+                      onTap: () =>
+                          _openAccountForm(context, accountId: account.id),
+                    ),
+                  ),
+                ],
+              ],
+              const SizedBox(height: 88),
+            ],
+          ),
         ),
-        if (!hasAccounts)
-          const EmptyAccountsView()
-        else ...[
-          if (assets.isNotEmpty) ...[
-            _SectionTitle(title: '资产', count: assets.length),
-            ...assets.map(
-              (account) => AssetListTile(
-                account: account,
-                onTap: () => _openAccountForm(context, accountId: account.id),
-              ),
-            ),
-          ],
-          if (liabilities.isNotEmpty) ...[
-            _SectionTitle(title: '负债', count: liabilities.length),
-            ...liabilities.map(
-              (account) => AssetListTile(
-                account: account,
-                onTap: () => _openAccountForm(context, accountId: account.id),
-              ),
-            ),
-          ],
-        ],
-        const SizedBox(height: 88),
       ],
     );
   }

@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/asset_repository.dart';
 import '../models/app_data.dart';
+import '../models/app_theme_mode.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/app_top_bar.dart';
 import 'account_form_screen.dart';
 import 'home_screen.dart';
 import 'monthly_savings_screen.dart';
@@ -12,15 +16,19 @@ class AppShell extends StatefulWidget {
   const AppShell({
     super.key,
     required this.repository,
+    this.onThemeModeChanged,
   });
 
   final AssetRepository repository;
+  final ValueChanged<AppThemeMode>? onThemeModeChanged;
 
   @override
   State<AppShell> createState() => _AppShellState();
 }
 
 class _AppShellState extends State<AppShell> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   late AppData _appData;
   bool _isLoading = true;
   AppSection _section = AppSection.home;
@@ -40,6 +48,7 @@ class _AppShellState extends State<AppShell> {
       _appData = data;
       _isLoading = false;
     });
+    widget.onThemeModeChanged?.call(data.settings.themeMode);
   }
 
   Future<void> _persist(AppData data) async {
@@ -48,6 +57,20 @@ class _AppShellState extends State<AppShell> {
       return;
     }
     setState(() => _appData = data);
+    widget.onThemeModeChanged?.call(data.settings.themeMode);
+  }
+
+  void _handleThemeModeChange(AppThemeMode mode) {
+    widget.onThemeModeChanged?.call(mode);
+    if (_isLoading) {
+      return;
+    }
+
+    final updated = _appData.updateSettings(
+      _appData.settings.copyWith(themeMode: mode),
+    );
+    setState(() => _appData = updated);
+    unawaited(widget.repository.save(updated));
   }
 
   void _onSectionSelected(AppSection section) {
@@ -74,10 +97,10 @@ class _AppShellState extends State<AppShell> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_section.label),
-        centerTitle: false,
-      ),
+      key: _scaffoldKey,
+      appBar: _section == AppSection.home
+          ? null
+          : AppTopBar(title: _section.label),
       drawer: AppDrawer(
         selectedSection: _section,
         onSectionSelected: _onSectionSelected,
@@ -95,6 +118,7 @@ class _AppShellState extends State<AppShell> {
         return HomeScreen(
           appData: _appData,
           onAppDataChanged: _persist,
+          onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
           onOpenMonthlyChart: () =>
               _onSectionSelected(AppSection.monthlySavings),
         );
@@ -104,6 +128,7 @@ class _AppShellState extends State<AppShell> {
         return SettingsScreen(
           appData: _appData,
           onSaved: _persist,
+          onThemeModeChanged: _handleThemeModeChange,
         );
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/account_category.dart';
 import '../models/asset_account.dart';
 import '../models/asset_type.dart';
+import '../theme/app_theme.dart';
 import '../utils/asset_type_ui.dart';
 import '../utils/currency_formatter.dart';
 import 'asset_type_icon.dart';
@@ -29,9 +30,9 @@ class AssetListTile extends StatelessWidget {
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.mdBorder),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.mdBorder,
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

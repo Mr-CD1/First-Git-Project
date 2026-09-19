@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
 import '../utils/numeric_input.dart';
 
 class NumericKeypad extends StatelessWidget {
@@ -109,9 +110,9 @@ class _KeyButton extends StatelessWidget {
 
     return Material(
       color: theme.colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: AppRadii.smBorder,
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadii.smBorder,
         onTap: onTap,
         child: SizedBox(
           height: 56,

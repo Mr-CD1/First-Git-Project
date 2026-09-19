@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_branding.dart';
+
 enum AppSection {
   home('资产总览', Icons.account_balance_wallet_outlined),
   monthlySavings('月度留存', Icons.bar_chart_rounded),
@@ -44,13 +46,13 @@ class AppDrawer extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                '我的资产',
+                AppBranding.appName,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                '个人资产管理',
+                AppBranding.tagline,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

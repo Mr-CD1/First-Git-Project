@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/app_data.dart';
 import '../models/monthly_snapshot.dart';
 import '../utils/currency_formatter.dart';
+import '../theme/app_theme.dart';
 import '../utils/date_formatter.dart';
 
 class MonthlySavingsCard extends StatelessWidget {
@@ -27,11 +28,7 @@ class MonthlySavingsCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
+      decoration: AppTheme.softPanel(theme.colorScheme),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -118,7 +115,7 @@ class _ReminderBanner extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: theme.colorScheme.primaryContainer.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadii.smBorder,
       ),
       child: Row(
         children: [

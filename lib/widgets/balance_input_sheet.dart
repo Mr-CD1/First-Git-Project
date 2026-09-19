@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../theme/app_theme.dart';
 import '../utils/currency_formatter.dart';
 import '../utils/numeric_input.dart';
 import 'numeric_keypad.dart';
@@ -132,13 +133,7 @@ class _BalanceInputSheetState extends State<_BalanceInputSheet> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: theme.colorScheme.primary.withValues(alpha: 0.35),
-              ),
-            ),
+            decoration: AppTheme.softPanelPrimary(theme.colorScheme),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
