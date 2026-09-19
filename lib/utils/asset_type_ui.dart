@@ -11,6 +11,7 @@ class AssetTypeUi {
       AssetType.alipay => Icons.account_balance_wallet_outlined,
       AssetType.bankCard => Icons.credit_card,
       AssetType.cash => Icons.payments_outlined,
+      AssetType.providentFund => Icons.home_work_outlined,
       AssetType.huabei => Icons.receipt_long_outlined,
       AssetType.other => Icons.more_horiz,
     };
@@ -22,6 +23,7 @@ class AssetTypeUi {
       AssetType.alipay => const Color(0xFF1677FF),
       AssetType.bankCard => const Color(0xFFFF8F1F),
       AssetType.cash => const Color(0xFF13C2C2),
+      AssetType.providentFund => const Color(0xFF1565C0),
       AssetType.huabei => const Color(0xFF1677FF),
       AssetType.other => const Color(0xFF8C8C8C),
     };

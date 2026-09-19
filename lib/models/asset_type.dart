@@ -5,6 +5,7 @@ enum AssetType {
   alipay('支付宝', AccountCategory.asset),
   bankCard('银行卡', AccountCategory.asset),
   cash('现金', AccountCategory.asset),
+  providentFund('公积金', AccountCategory.asset),
   huabei('花呗', AccountCategory.liability),
   other('其他', AccountCategory.asset);
 

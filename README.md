@@ -106,9 +106,30 @@ flutter run -d chrome
 flutter test
 ```
 
+### 应用图标与名称
+
+- 显示名称：**发财之路**（`lib/constants/app_branding.dart`、Android/iOS 清单、Windows 资源信息）
+- 启动图标源图：`assets/app_icon.png`；重新生成各平台图标：
+
+```bash
+dart run flutter_launcher_icons
+```
+
+- Windows 可执行文件：`facai_road.exe`（`windows/CMakeLists.txt` 中的 `BINARY_NAME`）
+
 ### 打包（Windows 发布版）
 
 Windows 桌面版使用无边框窗口，顶栏与系统标题栏区域融为一体，并在右侧提供最小化 / 最大化 / 关闭按钮。
+
+**一键构建（推荐，PowerShell）：**
+
+```powershell
+.\scripts\build_windows_installer.ps1
+```
+
+脚本会依次：`pub get` → 生成图标 → `flutter build windows --release` → 若本机已安装 [Inno Setup 6](https://jrsoftware.org/isinfo.php)，则在 `dist/` 下生成 `FacaiRoad_Setup_1.0.0.exe`。安装向导中可**自行选择安装目录**。
+
+仅构建可执行文件：
 
 ```bash
 flutter build windows --release
@@ -118,7 +139,7 @@ flutter build windows --release
 
 `build/windows/x64/runner/Release/`
 
-请**整文件夹**分发或拷贝（需包含 `flutter_application_2.exe`、`flutter_windows.dll` 与 `data` 目录）。
+请**整文件夹**分发或拷贝（需包含 `facai_road.exe`、`flutter_windows.dll` 与 `data` 目录），或使用上述安装包。
 
 ### Web 发布版（可选）
 
